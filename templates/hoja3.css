@@ -1,0 +1,31 @@
+.aux{
+    display: flex;
+    justify-content: center;
+}
+
+
+.descripcion{
+    display: flex;
+    background: rgb(108, 190, 201);
+    height: 600px;
+    width: 1400px;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 50px;
+    border-radius: 15px;
+}
+
+.descripcion .item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(31, 103, 114);
+    height: 400px;
+    width: 300px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    
+}
+

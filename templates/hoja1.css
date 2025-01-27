@@ -1,0 +1,26 @@
+
+
+/*ESTO SERIA PARA EL TEXTO Y LA IMAGEN DEL CENTRO */
+.introduccion{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    
+
+}
+.imagen{
+    height: 700px;
+    width: 700px;
+    margin-right: 50px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.texto{
+    border:2px #232323;
+    font-size: 18px;
+    background-color: rgb(108, 190, 201);
+    border-radius: 10px;
+    padding: 2em;
+}
+

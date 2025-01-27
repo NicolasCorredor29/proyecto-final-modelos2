@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="defaul.css">
+    <link rel="stylesheet" href="hoja2.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav class="menu">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="pqrs.html">PQRS</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+            </ul>
+        </nav>
+    </header>
+    <div class="fondo">
+    <div class="contenedor">
+        <div class="titulo">PQRS</div>
+        <form action="#" method="post" id="formpqrs">
+            <div class="formulario" id="aux">
+                <span>Fecha</span>
+                <input type="date" placeholder="Ingrese la fecha" name="fecha" id="fecha">
+            </div>
+            <div class="formulario">
+                <span>Tipo de petición: </span>
+                <input type="radio" name="tipo" value="peticion" id="peticion">Petición
+                <input type="radio" name="tipo" value="queja" id="queja">Queja
+                <input type="radio" name="tipo" value="reclamo" id="reclamo">Reclamo
+            </div>
+            
+            <div class="formulario" id="aux">
+                <span>Nombre</span>
+                <input type="text" placeholder="Ingrese Nombre y apellido" id="nombre">
+            </div>
+            <div class="formulario" id="aux">
+                <span>Dirección</span>
+                <input type="text" placeholder="Ingrese su Dirección" id="direccion">
+            </div>
+            <div class="formulario" id="aux">
+                <span>correo</span>
+                <input type="email" placeholder="Ingrese el correo" id="correo">
+            </div>
+            <div class="formulario" id="aux">
+                <span>C.C</span>
+                <input type="text" placeholder="Ingrese su documento" id="c.c">
+            </div>
+            <div class="formulario" id="aux">
+                <span>Telefono</span>
+                <input type="number" placeholder="Ingrese el telefono" id="telefono">
+            </div>
+            <div class="formulario" id="aux">
+                <label for="pqs">Descripción de la PQR</label>
+                <br>
+                <textarea name="pqr" id="pqr" rows="10" cols="50" placeholder="Escriba en este espacio su pregunta, queja o reclamo"></textarea>
+            </div>
+
+            <div class="button">
+                <button type="submit">  Enviar  </button>
+            </div>
+        </form>
+    </div>
+
+    </div>
+    <footer>
+        <div class="container">
+            <div class="contacto">
+                <h4>Contacto</h4>
+                <a href="rappisalud@hotmail.com">rappisalud@hormail.com</a>
+                <p> Telefono: 333 3333333</p>
+
+            </div>
+
+            <p>© 2025 Rappisalud. Todos los derechos reservados.</p>
+
+            <div class="redesSociales">
+                <h4>Siguenos</h4>
+                <a target="_blank" href="https://www.facebook.com"><i class="fab fa-facebook-f"></i></a>
+                <a target="_blank" href="https://www.instagram.com"><i class="fab fa-instagram"></i></a>
+                <a target="_blank" href="https://www.youtube.com"><i class="fab fa-youtube"></i></a>
+
+            </div>
+        </div>
+    </footer>
+    <script>
+        const formpqrs=document.getElementById("formpqrs")
+        formpqrs.addEventListener('submit',async(event)=>{
+            event.preventDefault()
+            const fecha =document.getElementById("fecha").value;
+            const tipoSeleccionado = document.querySelector('input[name="tipo"]:checked').value;
+            const nombre =document.getElementById("nombre").value;
+            const direccion =document.getElementById("direccion").value;
+            const correo =document.getElementById("correo").value;
+            const cc =document.getElementById("c.c").value;
+            const telefono =document.getElementById("telefono").value;
+            const pqr =document.getElementById("pqr").value;
+            const obt = 
+            {
+            fecha: fecha,
+            tiposeleccionado: tipoSeleccionado,
+            nombre: nombre,
+            direccion: direccion,
+            correo: correo,
+            cc: cc,
+            telefono: telefono,
+            pqr: pqr,
+        };
+            const response=await fetch("http://127.0.0.1:5000/usuario",{method:"POST",headers: {
+                    "Content-Type": "application/json",
+                },body:JSON.stringify(obt)})
+            console.log("papa salada")})
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+body{
+    background: powderblue;
+}
+/* ESTO SERIA SOLO PARA EL MENU DE ARRIBA */
+/* Quitamos margenes y estilos defaul */
+body, ul {
+    margin: 0;
+    padding: 0;
+}
+
+/* Estilo general para el menú */
+.menu ul {
+    list-style: none; 
+    display: flex;    
+    justify-content: center; 
+    background-color: #232323; 
+    padding: 10px 0; /
+}
+
+li {
+    margin: 0 15px; 
+}
+
+a {
+    text-decoration: none; 
+    color: white;         
+    font-size: 18px;       
+    padding: 5px 10px;    
+    transition: background-color 0.3s; 
+}
+
+a:hover {
+    background-color: #555; 
+    border-radius: 5px;     
+}
+/* ESTO ES PARA EL FOOTER*/
+.container{
+    display: flex;
+    justify-content:space-around;
+}
+footer{
+    color: white;
+    background-color: black;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
