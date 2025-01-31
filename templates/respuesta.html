@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Respuesta PQRS</title>
+    <link rel="stylesheet" href="defaul.css">
+    <link rel="stylesheet" href="hoja2.css">
+</head>
+<body>
+    <header>
+        <nav class="menu">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="pqrs.html">Nueva PQRS</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="fondo">
+        <div class="contenedor">
+            <div class="titulo">Respuesta a su PQRS</div>
+            <div class="formulario">
+                <span id="respuesta"></span>
+            </div>
+            <div class="button">
+                <a href="pqrs.html"><button>Enviar otra PQRS</button></a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="contacto">
+                <h4>Contacto</h4>
+                <a href="rappisalud@hotmail.com">rappisalud@hormail.com</a>
+                <p> Teléfono: 333 3333333</p>
+            </div>
+            <p>© 2025 Rappisalud. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Obtener la respuesta de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const respuesta = urlParams.get("respuesta");
+
+        // Mostrar la respuesta en la página
+        document.getElementById("respuesta").textContent = respuesta || "No se recibió ninguna respuesta.";
+    </script>
+</body>
+</html>

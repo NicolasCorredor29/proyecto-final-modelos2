@@ -87,32 +87,49 @@
         </div>
     </footer>
     <script>
-        const formpqrs=document.getElementById("formpqrs")
-        formpqrs.addEventListener('submit',async(event)=>{
-            event.preventDefault()
-            const fecha =document.getElementById("fecha").value;
+        const formpqrs = document.getElementById("formpqrs");
+        formpqrs.addEventListener('submit', async (event) => {
+            event.preventDefault();
+    
+            const fecha = document.getElementById("fecha").value;
             const tipoSeleccionado = document.querySelector('input[name="tipo"]:checked').value;
-            const nombre =document.getElementById("nombre").value;
-            const direccion =document.getElementById("direccion").value;
-            const correo =document.getElementById("correo").value;
-            const cc =document.getElementById("c.c").value;
-            const telefono =document.getElementById("telefono").value;
-            const pqr =document.getElementById("pqr").value;
-            const obt = 
-            {
-            fecha: fecha,
-            tiposeleccionado: tipoSeleccionado,
-            nombre: nombre,
-            direccion: direccion,
-            correo: correo,
-            cc: cc,
-            telefono: telefono,
-            pqr: pqr,
-        };
-            const response=await fetch("http://127.0.0.1:5000/usuario",{method:"POST",headers: {
-                    "Content-Type": "application/json",
-                },body:JSON.stringify(obt)})
-            console.log("papa salada")})
+            const nombre = document.getElementById("nombre").value;
+            const direccion = document.getElementById("direccion").value;
+            const correo = document.getElementById("correo").value;
+            const cc = document.getElementById("c.c").value;
+            const telefono = document.getElementById("telefono").value;
+            const pqr = document.getElementById("pqr").value;
+    
+            const obt = {
+                fecha: fecha,
+                tiposeleccionado: tipoSeleccionado,
+                nombre: nombre,
+                direccion: direccion,
+                correo: correo,
+                cc: cc,
+                telefono: telefono,
+                pqr: pqr
+            };
+    
+            try {
+                const response = await fetch("http://127.0.0.1:5000/usuario", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(obt)
+                });
+    
+                const respuestaTexto = await response.text(); // Recibir la respuesta en texto plano
+    
+                // Redirigir a la página de respuestas con la respuesta en la URL
+                window.location.href = `respuesta.html?respuesta=${encodeURIComponent(respuestaTexto)}`;
+            } catch (error) {
+                console.error("Error al enviar la PQRS:", error);
+                alert("Hubo un error al procesar su solicitud.");
+            }
+        });
     </script>
+    
 </body>
 </html>
