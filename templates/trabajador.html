@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Trabajador</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
+</head>
+<body>
+    <h2>Chats Pendientes</h2>
+    <ul id="lista_chats"></ul>
+
+    <script>
+        async function cargarChatsPendientes() {
+            const response = await fetch("http://127.0.0.1:5000/chats_pendientes");
+            const chats = await response.json();
+            
+            const lista = document.getElementById("lista_chats");
+            lista.innerHTML = "";
+
+            chats.forEach(usuario_id => {
+                let item = document.createElement("li");
+                let link = document.createElement("a");
+                link.href = `chat.html?usuario_id=${usuario_id}`;
+                link.textContent = `Chat con Usuario ${usuario_id}`;
+                item.appendChild(link);
+                lista.appendChild(item);
+            });
+        }
+
+        cargarChatsPendientes();
+    </script>
+</body>
+</html>

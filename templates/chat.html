@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat PQRS</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .chat-container { width: 50%; margin: auto; }
+        .chat-box { border: 1px solid #000; padding: 10px; height: 300px; overflow-y: scroll; }
+        .input-box { display: flex; margin-top: 10px; }
+        input { flex: 1; padding: 5px; }
+        button { padding: 5px 10px; }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <h2>Chat en curso</h2>
+        <div class="chat-box" id="chat"></div>
+        <div class="input-box">
+            <input type="text" id="mensaje" placeholder="Escribe un mensaje...">
+            <button onclick="enviarMensaje()">Enviar</button>
+        </div>
+        <button onclick="finalizarChat()">Finalizar Chat</button>
+    </div>
+
+    <script>
+        var socket = io.connect("http://127.0.0.1:5000");
+
+        // Obtener usuario_id desde la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const usuario_id = urlParams.get("usuario_id");
+
+        if (!usuario_id) {
+            alert("No se ha seleccionado un chat.");
+            window.location.href = "trabajador.html";
+        }
+
+        socket.emit("join", { usuario_id });
+
+        socket.on("message", function(msg) {
+            var chat = document.getElementById("chat");
+            var mensajeElemento = document.createElement("p");
+            mensajeElemento.textContent = msg;
+            chat.appendChild(mensajeElemento);
+            chat.scrollTop = chat.scrollHeight;
+        });
+
+        function enviarMensaje() {
+            var mensaje = document.getElementById("mensaje").value;
+            if (mensaje.trim() !== "") {
+                socket.emit("message", { usuario_id, mensaje });
+                document.getElementById("mensaje").value = "";
+            }
+        }
+
+        function finalizarChat() {
+            socket.emit("finalizar_chat", { usuario_id });
+            alert("El chat ha finalizado.");
+            window.location.href = "trabajador.html";
+        }
+    </script>
+</body>
+</html>
