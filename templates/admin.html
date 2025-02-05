@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="hoja4.css">
+    <title>Administrador - PQRS</title>
+</head>
+<body>
+    <header>
+        <nav class="menu">
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="pqrs.html">PQRS</a></li>
+                <li><a href="nosotros.html">Nosotros</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="fondo">
+        <div class="contenedor">
+            <h1>Espacio de Admin</h1>
+            <h3>PQRS Pendientes</h3>
+            <select id="lista_pqrs" onchange="cargarDatos()">
+                <option value="">Seleccione un PQRS</option>
+            </select>
+
+            <div class="item">
+                <span>Fecha</span>
+                <input type="text" id="fecha" readonly>
+                <p>Opción seleccionada tipo: <span id="tipo"></span></p>
+                <span>Nombre</span>
+                <input type="text" id="nombre" readonly>
+                <span>Dirección</span>
+                <input type="text" id="direccion" readonly>
+                <span>Correo</span>
+                <input type="text" id="correo" readonly>
+                <span>C.C</span>
+                <input type="text" id="cedula" readonly>
+                <span>Descripción PQRS</span>
+                <input type="text" id="pqrs" readonly>
+            </div>
+
+            <h3>Responder PQRS</h3>
+            <textarea id="respuesta" rows="4" placeholder="Escribe tu respuesta aquí..."></textarea>
+            <button onclick="enviarRespuesta()">Enviar Respuesta</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 Rappisalud. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        async function cargarPQRS() {
+            const response = await fetch("http://127.0.0.1:5000/pqrs_pendientes");
+            const pqrsData = await response.json();
+
+            const lista = document.getElementById("lista_pqrs");
+            lista.innerHTML = '<option value="">Seleccione un PQRS</option>';
+
+            for (let usuario_id in pqrsData) {
+                let option = document.createElement("option");
+                option.value = usuario_id;
+                option.textContent = `PQRS de ${pqrsData[usuario_id].nombre}`;
+                lista.appendChild(option);
+            }
+        }
+
+        async function cargarDatos() {
+            const usuario_id = document.getElementById("lista_pqrs").value;
+            if (!usuario_id) return;
+
+            const response = await fetch("http://127.0.0.1:5000/pqrs_pendientes");
+            const pqrsData = await response.json();
+            const datos = pqrsData[usuario_id];
+
+            document.getElementById("fecha").value = datos.fecha;
+            document.getElementById("tipo").textContent = datos.tiposeleccionado;
+            document.getElementById("nombre").value = datos.nombre;
+            document.getElementById("direccion").value = datos.direccion;
+            document.getElementById("correo").value = datos.correo;
+            document.getElementById("cedula").value = datos.cc;
+            document.getElementById("pqrs").value = datos.pqr;
+        }
+
+        async function enviarRespuesta() {
+            const usuario_id = document.getElementById("lista_pqrs").value;
+            const respuesta = document.getElementById("respuesta").value;
+
+            if (!usuario_id || respuesta.trim() === "") {
+                alert("Debe seleccionar un PQRS y escribir una respuesta.");
+                return;
+            }
+
+            console.log("Enviando respuesta para:", usuario_id); 
+
+            const data = { cc: usuario_id, respuesta: respuesta };
+
+            await fetch("http://127.0.0.1:5000/enviar_respuesta", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            });
+
+            alert("Respuesta enviada.");
+            cargarPQRS();  
+        }
+
+        cargarPQRS(); 
+    </script>
+</body>
+</html>

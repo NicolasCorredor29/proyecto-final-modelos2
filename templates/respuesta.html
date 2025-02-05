@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Respuesta PQRS</title>
-    <link rel="stylesheet" href="defaul.css">
-    <link rel="stylesheet" href="hoja2.css">
+    <title>Consultar Respuesta PQRS</title>
+    <link rel="stylesheet" href="hoja4.css">
 </head>
 <body>
     <header>
         <nav class="menu">
             <ul>
                 <li><a href="index.html">Inicio</a></li>
-                <li><a href="pqrs.html">Nueva PQRS</a></li>
+                <li><a href="pqrs.html">PQRS</a></li>
                 <li><a href="nosotros.html">Nosotros</a></li>
             </ul>
         </nav>
@@ -20,38 +19,34 @@
 
     <div class="fondo">
         <div class="contenedor">
-            <div class="titulo">Respuesta a su PQRS</div>
-            <div class="formulario">
-                <span id="respuesta"></span>
-                <div class="button">
-                    <a href="chat.html"><button>Ir al Chat</button></a>
-                </div>
-                
-            </div>
-            <div class="button">
-                <a href="pqrs.html"><button>Enviar otra PQRS</button></a>
-            </div>
+            <h1>Consultar Respuesta PQRS</h1>
+            <label for="cedula">Ingrese su Cédula:</label>
+            <input type="text" id="cedula">
+            <button onclick="consultarRespuesta()">Consultar</button>
+
+            <h3>Respuesta del Administrador:</h3>
+            <p id="respuesta">Aún no ha sido respondida.</p>
         </div>
     </div>
 
     <footer>
         <div class="container">
-            <div class="contacto">
-                <h4>Contacto</h4>
-                <a href="rappisalud@hotmail.com">rappisalud@hormail.com</a>
-                <p> Teléfono: 333 3333333</p>
-            </div>
             <p>© 2025 Rappisalud. Todos los derechos reservados.</p>
         </div>
     </footer>
 
     <script>
-        // Obtener la respuesta de la URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const respuesta = urlParams.get("respuesta");
+        async function consultarRespuesta() {
+            const cedula = document.getElementById("cedula").value;
+            if (!cedula.trim()) {
+                alert("Ingrese su cédula.");
+                return;
+            }
 
-        // Mostrar la respuesta en la página
-        document.getElementById("respuesta").textContent = respuesta || "No se recibió ninguna respuesta.";
+            const response = await fetch(`http://127.0.0.1:5000/obtener_respuesta/${cedula}`);
+            const data = await response.json();
+            document.getElementById("respuesta").textContent = data.respuesta;
+        }
     </script>
 </body>
 </html>

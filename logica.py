@@ -1,42 +1,59 @@
-from flask import Flask, request, Response, render_template
+from flask import Flask, request, Response, jsonify
 from flask_cors import CORS
-from flask_socketio import SocketIO, send
 from pyswip import Prolog
 
 app = Flask(__name__)
 CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="*")  # Habilitar WebSockets
 
 prolog = Prolog()
 prolog.consult("pqrs.pl")
 
+# Diccionarios para almacenar PQRS y respuestas enviadas
+pqrs_pendientes = {}
+respuestas_enviadas = {}
+
 @app.route('/usuario', methods=['POST'])
 def usuario():
-    if request.method == 'POST':
-        data = request.get_json()
-        print("Diccionario recibido:", data)
+    """Recibe los datos del PQRS y los almacena"""
+    data = request.get_json()
+    print(data)
+    usuario_id = data.get("cc") 
 
-        nombre = data.get("nombre", "Usuario")
-        tipo_pqrs = data.get("tiposeleccionado", "desconocido")
-        cedula = data.get("cc", "")
-        descripcion = data.get("pqr", "")
+    # Guardar PQRS en la lista de pendientes
+    pqrs_pendientes[usuario_id] = data
 
-        consulta = f"obtener_respuesta('{nombre}', {tipo_pqrs}, '{cedula}', '{descripcion}', Respuesta)"
-        resultado = list(prolog.query(consulta))
+    return Response("Su PQRS ha sido registrada.", mimetype="text/plain")
 
-        if resultado:
-            respuesta = resultado[0]["Respuesta"]
-        else:
-            respuesta = "Hubo un problema al procesar su solicitud."
+@app.route('/pqrs_pendientes', methods=['GET'])
+def obtener_pqrs():
+    """Devuelve la lista de PQRS pendientes"""
+    return jsonify(pqrs_pendientes)
 
-        return Response(respuesta, mimetype="text/plain")
+@app.route('/enviar_respuesta', methods=['POST'])
+def enviar_respuesta():
+    """Recibe la respuesta del administrador y la almacena"""
+    data = request.get_json()
+    usuario_id = data.get("cc")
+    respuesta = data.get("respuesta")
 
-# Manejar mensajes en el chat
-@socketio.on("message")
-def handle_message(msg):
-    print(f"Mensaje recibido: {msg}")
-    send(msg, broadcast=True)  # Envía el mensaje a todos los clientes conectados
+    if usuario_id in pqrs_pendientes:
+        respuestas_enviadas[usuario_id] = respuesta  # Guardar respuesta
+        del pqrs_pendientes[usuario_id]  # Eliminar PQRS ya respondido
 
+        print("Respuestas almacenadas:", respuestas_enviadas) 
+
+        return Response(f"Respuesta enviada a {usuario_id}", mimetype="text/plain")
+
+    return Response("No se encontró la PQRS para este usuario.", mimetype="text/plain")
+
+@app.route('/obtener_respuesta/<usuario_id>', methods=['GET'])
+def obtener_respuesta(usuario_id):
+    """Devuelve la respuesta enviada al usuario si existe"""
+    respuesta = respuestas_enviadas.get(usuario_id, "Aún no hay respuesta disponible.")
+
+    print(f"Consulta de respuesta para {usuario_id}: {respuesta}")  
+
+    return jsonify({"respuesta": respuesta})
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
