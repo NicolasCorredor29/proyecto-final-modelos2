@@ -12,13 +12,23 @@ prolog.consult("pqrs.pl")
 pqrs_pendientes = {}
 respuestas_enviadas = {}
 
+#Voy a usar listar auxiliares para tomar la información de los diccionarios
+#json
+aux=['fecha','tiposeleccionado','nombre','direccion','correo','cc','telefono','pqr']
+
 @app.route('/usuario', methods=['POST'])
 def usuario():
+    aux2=[]
     """Recibe los datos del PQRS y los almacena"""
     data = request.get_json()
-    print(data)
     usuario_id = data.get("cc") 
-
+    for i in range(8):
+            aux2.append(data[aux[i]])
+    hecho=f"PQRS({aux2[0]},{aux2[1]},{aux2[2]},{aux2[3]},{aux2[4]},{aux2[5]},{aux2[6]},{aux2[7]}).\n"
+    with open("bd.pl", "a") as archivo:
+            # Escribir el hecho en el archivo
+            archivo.write(hecho)
+    
     # Guardar PQRS en la lista de pendientes
     pqrs_pendientes[usuario_id] = data
 
@@ -33,8 +43,13 @@ def obtener_pqrs():
 def enviar_respuesta():
     """Recibe la respuesta del administrador y la almacena"""
     data = request.get_json()
+    print(data)
     usuario_id = data.get("cc")
     respuesta = data.get("respuesta")
+    hecho=f"RESPUESTA({usuario_id},{respuesta}).\n"
+    with open("bd.pl", "a") as archivo:
+            # Escribir el hecho en el archivo
+            archivo.write(hecho)
 
     if usuario_id in pqrs_pendientes:
         respuestas_enviadas[usuario_id] = respuesta  # Guardar respuesta

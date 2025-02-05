@@ -25,11 +25,16 @@ body{
 
 
 .contenedor .item{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 10px 12px 0;
     padding: 30px;
     background: rgb(185, 205, 221);
     width: 30em;
     height: 25em;
-    margin: auto;
+    
 }
 .contenedor .item:nth-child(2){
     background: papayawhip;
