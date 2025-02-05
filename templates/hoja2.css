@@ -2,11 +2,24 @@ body{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    min-height: 100vh;
 }
 
+
+.respuesta{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: aliceblue;
+    width: 47em;
+    height: 15em;
+    margin-top: 2em;
+    border-radius: 15px;
+}
 .fondo{
     display: flex;
     height: 100vh;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 10px;
