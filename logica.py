@@ -6,7 +6,7 @@ app = Flask(__name__)
 CORS(app)
 
 prolog = Prolog()
-prolog.consult("pqrs.pl")
+
 
 # Diccionarios para almacenar PQRS y respuestas enviadas
 pqrs_pendientes = {}
